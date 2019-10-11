@@ -24,7 +24,6 @@ function move(id){
     var target_d=0; //儲存小DIV可以去的編號，0表示不能移動
     var finish_flag=true; //設定遊戲是否完成標誌，true表示完成
     for(i=1;i<10;++i){
-        console.log(i);
         if(d[i]==id)
             break;
     } //這個for迴圈是找出小DIV在大DIV中的位置
