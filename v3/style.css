@@ -38,9 +38,6 @@ body{
     -o-transition: 0.3s;/*opera*/
     transition: 0.3s;
 }
-#dvPuzzle:hover{
-    color: #ffe171;
-}
 #control{
     width: 150px;
     height: 450px;
