@@ -53,19 +53,6 @@ body{
     color: #222;
     margin-top: 10px;
 } /*設定控制區按鈕的共同樣式*/
-#start{
-    display: inline-block;
-    font-size: 28px;
-    width: 100px;
-    height: 28px;
-    background-color: #20a6fa;
-    color: #ffe171;
-    text-shadow: 1px 1px 2px #ffe171;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px #4c98f5;
-    text-align: center;
-    cursor: pointer;
-} /*給start按鈕設定屬性。cursor:pointer屬性讓滑鼠移到元素上面時會顯示不同的滑鼠形狀，pointer是手型*/
 #reset{
     display: inline-block;
     font-size: 28px;
