@@ -88,6 +88,7 @@ $(function() {
                     clearInterval(set_timer);
                     rand_pic = false;
                     $("#Pic0").append(first_pic);
+                    alert("Congratulation!");
                 }
             }
         }
