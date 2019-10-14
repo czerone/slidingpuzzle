@@ -1,7 +1,9 @@
 $(function() {
     var time = 0;
-    var pause=true;
+    var pause = true;
+    var rand_pic = false;
     var set_timer;
+    var first_pic;
     // 位置轉座標的換算表
     var posConv = {};
     for(var i=0;i<9;i++) {
@@ -26,6 +28,22 @@ $(function() {
         if(col < 3) // 右
             pool.push(i + 1);
         return pool;
+    }
+    // 計時
+    function timer() { //定時函式，每一秒執行一次
+        time += 1; //一秒鐘加一，單位是秒
+        var min = parseInt(time/60); //把秒轉換為分鐘，一分鐘60秒，取商就是分鐘
+        var sec = time%60; //取餘就是秒
+        $("#timer").text(min + "分" + sec + "秒"); //然後把時間更新顯示出來
+    }
+    // 打亂圖片
+    function random_d() {
+        for(var i=0;i<500;i++) {
+            var cells = $("#dvPuzzle div");
+            // 找出空格所在位置,並取得其相鄰圖塊
+            var toMove = getNearPos(cells.index($("#Pic0")[0]));
+            cells.eq(toMove[parseInt(Math.random()*toMove.length)]).click();
+        }
     }
     // 點選動作
     $(".PicCell").click(function() {
@@ -54,19 +72,40 @@ $(function() {
                     }
                 }
             }
+            if(rand_pic) { // shuffle時不確認
+                // 確認是否完成拼圖
+                var finish_flag = true;
+                cells = $("#dvPuzzle div");
+                for(var num=1;num<9;num++) {
+                    if(cells.eq(num).attr("id") != "Pic"+num) {
+                        finish_flag = false;
+                        break;
+                    }
+                }
+                if(finish_flag == true) {
+                    $("#start").text("開始");
+                    pause = true;
+                    clearInterval(set_timer);
+                    rand_pic = false;
+                    $("#Pic0").append(first_pic);
+                }
+            }
         }
-
     });
-    function timer() { //定時函式，每一秒執行一次
-        time += 1; //一秒鐘加一，單位是秒
-        var min = parseInt(time/60); //把秒轉換為分鐘，一分鐘60秒，取商就是分鐘
-        var sec = time%60; //取餘就是秒
-        $("#timer").text(min + "分" + sec + "秒"); //然後把時間更新顯示出來
-    }
+
     $("#start").click(function() { //開始暫停函式
         if(pause) {
+            if(!rand_pic) {
+                if(set_timer)
+                    clearInterval(set_timer);
+                time = 0;
+                first_pic = $("#Pic0 img");
+                $("#Pic0 img").remove();
+                pause = false; //暫停表示設定為false
+                random_d();
+                rand_pic = true;
+            }
             $("#start").text("暫停"); //把按鈕文字設定為暫停
-            pause = false; //暫停表示設定為false
             set_timer = setInterval(timer, 1000); //啟動定時
         } //如果當前是暫停，則開始
         else {
@@ -84,12 +123,9 @@ $(function() {
         time = 0;
         set_timer = setInterval(timer, 1000);
         // 除去左上角
+        first_pic = $("#Pic0 img");
         $("#Pic0 img").remove();
-        for(var i=0;i<500;i++) {
-            var cells = $("#dvPuzzle div");
-            // 找出空格所在位置,並取得其相鄰圖塊
-            var toMove = getNearPos(cells.index($("#Pic0")[0]));
-            cells.eq(toMove[parseInt(Math.random()*toMove.length)]).click();
-        }
+        random_d();
+        rand_pic = true;
     });
 });
