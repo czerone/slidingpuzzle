@@ -29,30 +29,33 @@ $(function() {
     }
     // 點選動作
     $(".PicCell").click(function() {
-        // 找尋左右上下有無Pic0,有則可以與他交換位置
-        // 先找出元素是9個中第幾個?
-        var cells = $("#dvPuzzle div");
-        var i = cells.index(this);
-        var toCheck = getNearPos(i);
-        while(toCheck.length > 0){
-            var j = toCheck.pop();
-            if(cells.eq(j).attr("id") == "Pic0") { // 為空白格,交換位置
-                // 排序,必要時對調,讓i < j
-                if(i > j){
-                    var k = j;j = i;i = k;
-                }
-                var ahead = cells.eq(i);
-                var behind = cells.eq(j);
-                var behindPrev = behind.prev();
-                // 左右對調
-                if(Math.abs(i-j) == 1)
-                    behind.after(ahead);
-                else { // 上下對調
-                    ahead.after(behind);
-                    behindPrev.after(ahead);
+        if(!pause) {
+            // 找尋左右上下有無Pic0,有則可以與他交換位置
+            // 先找出元素是9個中第幾個?
+            var cells = $("#dvPuzzle div");
+            var i = cells.index(this);
+            var toCheck = getNearPos(i);
+            while(toCheck.length > 0){
+                var j = toCheck.pop();
+                if(cells.eq(j).attr("id") == "Pic0") { // 為空白格,交換位置
+                    // 排序,必要時對調,讓i < j
+                    if(i > j){
+                        var k = j;j = i;i = k;
+                    }
+                    var ahead = cells.eq(i);
+                    var behind = cells.eq(j);
+                    var behindPrev = behind.prev();
+                    // 左右對調
+                    if(Math.abs(i-j) == 1)
+                        behind.after(ahead);
+                    else { // 上下對調
+                        ahead.after(behind);
+                        behindPrev.after(ahead);
+                    }
                 }
             }
         }
+
     });
     function timer() { //定時函式，每一秒執行一次
         time += 1; //一秒鐘加一，單位是秒
@@ -73,6 +76,13 @@ $(function() {
         }
     });
     $("#reset").click(function() {
+        // 更新狀態與時間
+        $("#start").text("暫停");
+        pause = false;
+        if(set_timer)
+            clearInterval(set_timer);
+        time = 0;
+        set_timer = setInterval(timer, 1000);
         // 除去左上角
         $("#Pic0 img").remove();
         for(var i=0;i<500;i++) {
